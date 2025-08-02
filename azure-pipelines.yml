@@ -1,0 +1,31 @@
+pool: My-pyara-pool
+
+trigger: none
+
+steps:
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'Write-Host "Hello World"'
+
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/todoapp_infra'
+    backendServiceArm: 'Anuj_SC'
+    backendAzureRmResourceGroupName: 'azuredevops'
+    backendAzureRmStorageAccountName: 'demostorage8250'
+    backendAzureRmContainerName: 'anujcontainer'
+    backendAzureRmKey: 'anuj.tfstate'
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/todoapp_infra'
+    environmentServiceNameAzureRM: 'Anuj_SC'
